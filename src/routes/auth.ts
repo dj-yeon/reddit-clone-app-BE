@@ -9,11 +9,11 @@ const mapError = (errors: Object[]) => {
   return errors.reduce((prev: any, err: any) => {
     prev[err.property] = Object.entries(err.constraints)[0][1];
     return prev;
-  }, []);
+  }, {});
 };
 
 const register = async (req: Request, res: Response) => {
-  const { email, username, password } = req.body;
+  const { email, password, username } = req.body;
 
   try {
     let errors: any = {};
@@ -93,7 +93,10 @@ const login = async (req: Request, res: Response) => {
     );
 
     return res.json({ user, token });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error });
+  }
 };
 
 const router = Router();
